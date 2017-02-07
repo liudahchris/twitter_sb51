@@ -28,7 +28,7 @@ def main():
     # set query and other parameters
     QUERY = '''#sbli OR #sb51 OR #superbowl OR "super bowl"'''
     RESOURCE = 'search/tweets'
-    PARAMS = {'q': QUERY,'lang':'en','count':100,'since':'2017-2-5','until':'2017-2-6'}
+    PARAMS = {'q': QUERY,'lang':'en','count':100,'since':'2017-2-4','until':'2017-2-7'}
     r = TwitterAPI.TwitterRestPager(api,RESOURCE,PARAMS)
 
     # insert data into mongo
