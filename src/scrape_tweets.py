@@ -32,7 +32,7 @@ def main():
     r = TwitterAPI.TwitterRestPager(api,RESOURCE,PARAMS)
 
     # insert data into mongo
-    for i,tweet in enumerate(r.get_iterator()):
+    for i,tweet in enumerate(r.get_iterator(wait=6,new_tweets=True)):
         tweets.insert_one(tweet)
         if i%500==0:
             print "{} tweets stored".format(i)
