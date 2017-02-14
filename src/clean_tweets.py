@@ -34,14 +34,17 @@ def main():
     available for other analyses if desired.
     '''
     client = pymongo.MongoClient()
-    source_db = 'twitter_sb51'
-    source_collection = 'tweets'
-    target_db = 'clean_tweets'
-    target_collection = 'clean_tweets'
+    src_db_name = 'twitter_sb51'
+    src_col_name = 'tweets'
+    target_db_name = 'clean_tweets'
+    target_col_name = 'clean_tweets'
 
-    for tweet in client[source_db][source_collection].find():
+    src_db = client[src_db_name]
+    target_db = client[target_db_name]
+
+    for tweet in src_db[src_col_name].find():
         clean_tweet = _get_tweet_info(tweet)
-        client[target_db][target_collection].insert_one(clean_tweet)
+        client[target_db][target_col_name].insert_one(clean_tweet)
 
     return None
 
