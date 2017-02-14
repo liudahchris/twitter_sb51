@@ -35,16 +35,16 @@ def main():
     '''
     client = pymongo.MongoClient()
     src_db_name = 'twitter_sb51'
-    src_col_name = 'tweets'
+    src_coll_name = 'tweets'
     target_db_name = 'clean_tweets'
-    target_col_name = 'clean_tweets'
+    target_coll_name = 'clean_tweets'
 
     src_db = client[src_db_name]
     target_db = client[target_db_name]
 
-    for tweet in src_db[src_col_name].find():
+    for tweet in src_db[src_coll_name].find():
         clean_tweet = _get_tweet_info(tweet)
-        client[target_db][target_col_name].insert_one(clean_tweet)
+        target_db[target_coll_name].insert_one(clean_tweet)
 
     return None
 
