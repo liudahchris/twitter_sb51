@@ -76,4 +76,4 @@ def bin_dates(date_list,unit='second',bin_size=15):
 
     OUTPUT: Updated list of dates assigned to bins
     '''
-    return [_bin_date(date_str),unit,bin_size) for date_str in date_list]
+    return [_bin_date(date_str,unit,bin_size) for date_str in date_list]
