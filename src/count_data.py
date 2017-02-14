@@ -6,7 +6,7 @@ from dateuntil import tz
 import matplotlib.pyplot as plt
 import numpy as np
 
-def plot_time_counts(count_dict):
+def plot_time_counts(count_dict,outname='../images/time_counts.png'):
     '''
     INPUT: dictionary where keys are datetimes and values are counts
     OUTPUT: none
@@ -15,7 +15,9 @@ def plot_time_counts(count_dict):
     X,y = np.array(X),np.array(y)
 
     plt.plot(X,y)
-    plt.save_fig()
+    plt.save_fig(outname)
+
+    return None
 
 
 def convert_utc(time_str,time_format="%Y/%m/%d %H:%M:%S",zone='America/Los_Angeles'):
@@ -59,6 +61,8 @@ def main():
         tweet_counts[time] += 1
 
     client.close()
+
+    plot_time_counts(tweet_counts)
 
     return None
 
