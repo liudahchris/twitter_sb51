@@ -56,7 +56,7 @@ def main():
     tweet_counts = defaultdict(int)
 
     for i,tweet in enumerate(coll.find()):
-        if i%500==0:
+        if i%10000==0:
             print "{} tweets loaded".format(i)
         time = _bin_date(tweet['created_at'],bin_size=30)
         if time < START_TIME or time > END_TIME:
