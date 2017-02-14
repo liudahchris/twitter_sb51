@@ -3,16 +3,22 @@ import pymongo
 from clean_date import _bin_date
 from datetime import datetime
 from dateuntil import tz
+import matplotlib.pyplot as plt
+import numpy as np
 
 def plot_time_counts(count_dict):
     '''
-    INPUT: dictionary where keys are times and values are counts
+    INPUT: dictionary where keys are datetimes and values are counts
     OUTPUT: none
     '''
-    pass
+    X,y = zip(*count_dict.items())
+    X,y = np.array(X),np.array(y)
+
+    plt.plot(X,y)
+    plt.save_fig()
 
 
-def convert_utc(time_str,zone='America/Los_Angeles',time_format="%Y/%m/%d %H:%M:%S"):
+def convert_utc(time_str,time_format="%Y/%m/%d %H:%M:%S",zone='America/Los_Angeles'):
     '''
     INPUT: date string in form "%Y/%m/%d %H:%M:%S" in UTC
     OUTPUT: datetime object in PST
@@ -24,6 +30,7 @@ def convert_utc(time_str,zone='America/Los_Angeles',time_format="%Y/%m/%d %H:%M:
     utc_time = utc_time.replace(tzinfo=from_zone)
 
     return utc_time.astimezone(to_zone)
+
 
 def main():
     '''
@@ -44,12 +51,11 @@ def main():
 
     tweet_counts = defaultdict(int)
 
-    pst =
-
     for tweet in coll.find():
         time = _bin_date(tweet['created_at'],bin_size=30)
-        if time =< START_TIME or time >= END_TIME:
+        if time < START_TIME or time > END_TIME:
             continue
+        time = convert_utc(time)
         tweet_counts[time] += 1
 
     client.close()
