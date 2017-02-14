@@ -2,7 +2,7 @@ from collections import defaultdict
 import pymongo
 from clean_date import _bin_date
 from datetime import datetime
-from dateuntil import tz
+from dateutil import tz
 import matplotlib.pyplot as plt
 import numpy as np
 
