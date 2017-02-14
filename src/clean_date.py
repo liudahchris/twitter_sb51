@@ -1,4 +1,4 @@
-def clean_date_(date_str):
+def _clean_date(date_str):
     '''
     Dates scraped from Twitter API is messy and needs to be formatted first.
     Date comes in the form:
@@ -31,9 +31,9 @@ def clean_dates(date_list):
     OUTPUT: List of dates as string, in form:
     "2016/02/06 23:59:59"
     '''
-    return [clean_date_(date_str) for date_str in date_list]
+    return [_clean_date(date_str) for date_str in date_list]
 
-def bin_date_(date_str,unit='second',bin_size=15):
+def _bin_date(date_str,unit='second',bin_size=15):
     '''
     INPUT:
     date_str : date as string, in form:
@@ -76,4 +76,4 @@ def bin_dates(date_list,unit='second',bin_size=15):
 
     OUTPUT: Updated list of dates assigned to bins
     '''
-    return [bin_date_(date_str),unit,bin_size) for date_str in date_list]
+    return [_bin_date(date_str),unit,bin_size) for date_str in date_list]
