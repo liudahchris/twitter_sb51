@@ -3,6 +3,8 @@ import pymongo
 from clean_date import _bin_date
 from datetime import datetime
 from dateutil import tz
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
