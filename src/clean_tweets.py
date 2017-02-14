@@ -46,6 +46,8 @@ def main():
         clean_tweet = _get_tweet_info(tweet)
         target_db[target_coll_name].insert_one(clean_tweet)
 
+    client.close()
+
     return None
 
 if __name__=="__main__":
