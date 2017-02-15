@@ -50,13 +50,14 @@ def _bin_date(date_str,unit='second',bin_size=15):
     date, time = date_str.split()
     hour, minute, second = time.split(':')
     bin_ = lambda x: int(x)/bin_size * bin_size
+    add_zeroes = lambda x: '0'*(2-len(x))+x
     if unit == 'second':
-        second = str(bin_(second))
+        second = add_zeroes(str(bin_(second)))
     if unit == 'minute':
-        minute = str(bin_(minute))
+        minute = add_zeroes(str(bin_(minute)))
         second = '00'
     if unit == 'hour':
-        hour = str(bin_(hour))
+        hour = add_zeroes(str(bin_(hour)))
         minute = '00'
         second = '00'
     time = "{}:{}:{}".format(hour,minute,second)

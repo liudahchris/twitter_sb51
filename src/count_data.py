@@ -41,7 +41,7 @@ def convert_utc(time_str,time_format="%Y/%m/%d %H:%M:%S",zone='America/Los_Angel
 
 def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
     with open(outname,'w') as f:
-        f.write('{}, {}\n'.format(key_names,val_names))
+        f.write('{},{}\n'.format(key_names,val_names))
         for key in sorted(d):
             f.write('{}, {}\n'.format(key,d[key]))
 
