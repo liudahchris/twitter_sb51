@@ -7,17 +7,20 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sns
 
 def plot_time_counts(count_dict,outname='../images/time_counts.png'):
     '''
     INPUT: dictionary where keys are datetimes and values are counts
     OUTPUT: none
     '''
-    X,y = zip(*count_dict.items())
-    X,y = np.array(X),np.array(y)
+    X,y = [],[]
+    for key in sorted(count_dict):
+        X.append(key)
+        y.append(count_dict[key])
 
     plt.plot(X,y)
-    plt.savefig(fname=outname,dpi=300)
+    plt.savefig(outname)
 
     return None
 
@@ -35,6 +38,14 @@ def convert_utc(time_str,time_format="%Y/%m/%d %H:%M:%S",zone='America/Los_Angel
 
     return utc_time.astimezone(to_zone)
 
+
+def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
+    with open(outname,'w') as f:
+        f.write('{}, {}'.format(key_names,val_names))
+        for key in sorted(d):
+            f.write('{}, {}'.format(key,d[key]))
+
+    return None
 
 def main():
     '''
@@ -56,17 +67,17 @@ def main():
     tweet_counts = defaultdict(int)
 
     for i,tweet in enumerate(coll.find()):
-        if i%10000==0:
-            print "{} tweets loaded".format(i)
+        # if i%10000==0:
+        #     print "{} tweets loaded".format(i)
         time = _bin_date(tweet['created_at'],bin_size=30)
         if time < START_TIME or time > END_TIME:
             continue
-        time = convert_utc(time)
+        # time = convert_utc(time)
         tweet_counts[time] += 1
 
     client.close()
 
-    plot_time_counts(tweet_counts)
+    dict_to_csv(tweet_counts,'tweet_counts.csv','time','counts')
 
     return None
 
