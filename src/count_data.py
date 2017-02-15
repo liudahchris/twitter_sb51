@@ -17,7 +17,7 @@ def plot_time_counts(count_dict,outname='../images/time_counts.png'):
     X,y = np.array(X),np.array(y)
 
     plt.plot(X,y)
-    plt.savefig(outname)
+    plt.savefig(fname=outname,dpi=300)
 
     return None
 
