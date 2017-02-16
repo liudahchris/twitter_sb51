@@ -11,7 +11,9 @@ def clean_text(tweet,stopwords,punc):
     INPUT: string
     OUTPUT: string
     '''
+    # Lowercase, strip punctation, tokenize
     tokens = tweet.lower().translate(None,punc).split()
+    # Remove stopwords and hashtags
     tokens = [token for token in tokens if token[0]!='#' and token not in stopwords]
     return ' '.join(tokens)
 
@@ -30,6 +32,15 @@ def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
 
 def aggregate_tweets(src_coll,target_coll,verbose=False):
     '''
+    Takes a source collection and aggregates it into new collection.
+    Source collection docs have structure:
+        - created_at
+        - text
+    Target collection has structure:
+        - time
+        - tweets (array of tweets)
+    INPUT: source pymongo collection, target pymongo collection, bool
+    OUTPUT: None
     '''
     START_TIME = "2017/02/05 22:30:00"
     END_TIME = "2017/02/06 04:30:00"
@@ -37,19 +48,33 @@ def aggregate_tweets(src_coll,target_coll,verbose=False):
 
     # Punctuation to remove
     # We'll keep @ to look at popular users and # to filter out hashtags
-    PUNCTUATION = string.punctuation.translate(None,'@#')
+    PUNC = string.punctuation.translate(None,'@#')
 
     for i,tweet in enumerate(src_coll.find()):
         print_status(i,verbose=VERBOSE)
         # Bin time
         time = _bin_date(tweet['created_at'],bin_size=60)
-        if time =< START_TIME or time >= END_TIME:
+        if time < START_TIME or time > END_TIME:
             continue
-        text = clean_text(tweet['text'],stopwords=STOPWORDS,punc=PUNCTUATION)
+        text = clean_text(tweet['text'],stopwords=STOPWORDS,punc=PUNC)
         # Add tweet text to time slot
         target_coll.update_one({'time':time},{'$push':{'tweets':text}},upsert=True)
     return None
 
+def count_tweets(coll):
+    '''
+    Function takes in pymongo collection containing fields:
+        - time (string in form %Y/%m/%d %H:%M:%S)
+        - tweets (arr)
+    Iterates and adds field "counts", corresponding to number of tweets at time
+    INPUT: pymongo collection object
+    OUTPUT: None
+    '''
+    for doc in coll.find():
+        time = doc['time']
+        count = len(doc['tweets'])
+        coll.update_one({'time':time},{'$set':{'count':count}})
+    return None
 
 def print_status(i,n=10000,verbose=True):
     '''
@@ -78,14 +103,14 @@ def main():
 
     VERBOSE = False
 
+    # Build new collection that has fields time and tweets during that time
+    print 'Aggregating tweets...'
     aggregate_tweets(coll,target,VERBOSE)
-    
-
+    # Takes newly generated collection and adds field 'count' to it
+    print 'Counting tweets...'
+    count_tweets(target)
 
     client.close()
-
-    dict_to_csv(tweet_counts,'tweet_counts.csv','time','counts')
-
     return None
 
 
