@@ -58,7 +58,7 @@ def aggregate_tweets(src_coll,target_coll,verbose=False):
         time = _bin_date(tweet['created_at'],bin_size=60)
         if time < START_TIME or time > END_TIME:
             continue
-        text = clean_text(tweet['text'],stopwords=STOPWORDS,punc=PUNC)
+        text = tweet['text']
         # Add tweet text to time slot
         target_coll.update_one({'time':time},{'$push':{'tweets':text}},upsert=True)
     return None
