@@ -2,7 +2,7 @@ from collections import defaultdict
 import pymongo
 from clean_date import _bin_date
 import numpy as np
-from string import punctuation
+import string
 from nltk.corpus import stopwords
 
 def clean_text(tweet,stopwords,punc):
@@ -101,7 +101,7 @@ def main():
     coll = db['clean_tweets']
     target = db['binned_tweets']
 
-    VERBOSE = False
+    VERBOSE = True
 
     # Build new collection that has fields time and tweets during that time
     print 'Aggregating tweets...'
