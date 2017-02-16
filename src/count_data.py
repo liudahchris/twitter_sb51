@@ -51,7 +51,7 @@ def aggregate_tweets(src_coll,target_coll,verbose=False):
     PUNC = string.punctuation.translate(None,'@#')
 
     for i,tweet in enumerate(src_coll.find()):
-        print_status(i,verbose=VERBOSE)
+        print_status(i,verbose=verbose)
         # Bin time
         time = _bin_date(tweet['created_at'],bin_size=60)
         if time < START_TIME or time > END_TIME:
