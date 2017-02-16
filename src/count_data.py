@@ -32,7 +32,7 @@ def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
     return None
 
 
-def aggregate_tweets(src_coll,target_coll,verbose=False):
+def bin_tweets(src_coll,target_coll,verbose=False):
     '''
     Takes a source collection and aggregates it into new collection.
     Source collection docs have structure:
@@ -60,7 +60,7 @@ def aggregate_tweets(src_coll,target_coll,verbose=False):
             continue
         text = tweet['text']
         # Add tweet text to time slot
-        target_coll.update_one({'time':time},{'$push':{'tweets':text}},upsert=True)
+        target_coll.insert_one({'text':text,'time':time})
     return None
 
 def count_tweets(coll):
@@ -103,11 +103,11 @@ def main():
     coll = db['clean_tweets']
     target = db['binned_tweets']
 
-    VERBOSE = True
+    VERBOSE = False
 
     # Build new collection that has fields time and tweets during that time
-    print 'Aggregating tweets...'
-    aggregate_tweets(coll,target,VERBOSE)
+    print 'Binning tweets...'
+    bin_tweets(coll,target,VERBOSE)
     # Takes newly generated collection and adds field 'count' to it
     print 'Counting tweets...'
     count_tweets(target)
