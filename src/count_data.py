@@ -4,13 +4,15 @@ from clean_date import _bin_date
 import numpy as np
 import string
 from nltk.corpus import stopwords
+from unidecode import unidecode
 
 def clean_text(tweet,stopwords,punc):
     '''
     Takes a tweet, lowers and strips punctuation, and removes stopwords and tags
-    INPUT: string
+    INPUT: unicode
     OUTPUT: string
     '''
+    tweet = unidecode(tweet)
     # Lowercase, strip punctation, tokenize
     tokens = tweet.lower().translate(None,punc).split()
     # Remove stopwords and hashtags
@@ -44,7 +46,7 @@ def aggregate_tweets(src_coll,target_coll,verbose=False):
     '''
     START_TIME = "2017/02/05 22:30:00"
     END_TIME = "2017/02/06 04:30:00"
-    STOPWORDS = stopwords.words('english')
+    STOPWORDS = [unidecode(word) for word in stopwords.words('english')]
 
     # Punctuation to remove
     # We'll keep @ to look at popular users and # to filter out hashtags
