@@ -108,9 +108,6 @@ def main():
     # Build new collection that has fields time and tweets during that time
     print 'Binning tweets...'
     bin_tweets(coll,target,VERBOSE)
-    # Takes newly generated collection and adds field 'count' to it
-    print 'Counting tweets...'
-    count_tweets(target)
 
     client.close()
     return None
