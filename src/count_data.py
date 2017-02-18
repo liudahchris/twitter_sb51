@@ -3,21 +3,7 @@ import pymongo
 from clean_date import _bin_date
 import numpy as np
 import string
-from nltk.corpus import stopwords
 from unidecode import unidecode
-
-def clean_text(tweet,stopwords,punc):
-    '''
-    Takes a tweet, lowers and strips punctuation, and removes stopwords and tags
-    INPUT: unicode
-    OUTPUT: string
-    '''
-    tweet = unidecode(tweet)
-    # Lowercase, strip punctation, tokenize
-    tokens = tweet.lower().translate(None,punc).split()
-    # Remove stopwords and hashtags
-    tokens = [token for token in tokens if token[0]!='#' and token not in stopwords]
-    return ' '.join(tokens)
 
 def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
     '''
@@ -46,11 +32,6 @@ def bin_tweets(src_coll,target_coll,verbose=False):
     '''
     START_TIME = "2017/02/05 22:30:00"
     END_TIME = "2017/02/06 04:30:00"
-    STOPWORDS = [unidecode(word) for word in stopwords.words('english')]
-
-    # Punctuation to remove
-    # We'll keep @ to look at popular users and # to filter out hashtags
-    PUNC = string.punctuation.translate(None,'@#')
 
     for i,tweet in enumerate(src_coll.find()):
         print_status(i,verbose=verbose)

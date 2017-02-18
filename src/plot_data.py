@@ -1,7 +1,24 @@
 from datetime import datetime
 from dateutil import tz
 import matplotlib.pyplot as plt
+from nltk.corpus import stopwords
+import pymongo
 import seaborn as sns
+import string
+from unidecode import unidecode
+
+def clean_text(tweet,stopwords,punc):
+    '''
+    Takes a tweet, lowers and strips punctuation, and removes stopwords and tags
+    INPUT: unicode
+    OUTPUT: string
+    '''
+    tweet = unidecode(tweet)
+    # Lowercase, strip punctation, tokenize
+    tokens = tweet.lower().translate(None,punc).split()
+    # Remove stopwords and hashtags
+    tokens = [token for token in tokens if token[0]!='#' and token not in stopwords]
+    return ' '.join(tokens)
 
 def plot_time_counts(count_dict,outname='../images/time_counts.png'):
     '''
@@ -32,7 +49,22 @@ def convert_utc(time_str,time_format="%Y/%m/%d %H:%M:%S",zone='America/Los_Angel
     return utc_time.astimezone(to_zone)
 
 def main():
-    pass
+    '''
+    '''
+    client = pymongo.MongoClient()
+    db = client['clean_tweets']
+    coll = db['binned_tweets']
+
+    PIPELINE = [{'$group':{'_id':'$time','tweets':{'$push':'$text'}}}]
+    ALLOW_DISK_USE = True
+
+    STOPWORDS = [unidecode(word) for word in stopwords.words('english')]
+    SEARCH_WORDS = ['#sb51','#sbli','#superbowl','super','bowl']
+    STOPWORDS += SEARCH_WORDS
+
+    # Punctuation to remove
+    # We'll keep @ to look at popular users and # to filter out hashtags
+    PUNC = string.punctuation.translate(None,'@#')
 
 if __name__=='__main__':
     main()
