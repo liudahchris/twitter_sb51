@@ -5,28 +5,15 @@ import numpy as np
 import string
 from unidecode import unidecode
 
-def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
-    '''
-    Writes dictionary key and value pairs into CSV file.
-    INPUT: dict, str, str(optional), str(optional)
-    OUTPUT: None
-    '''
-    with open(outname,'w') as f:
-        f.write('{},{}\n'.format(key_names,val_names))
-        for key in sorted(d):
-            f.write('{}, {}\n'.format(key,d[key]))
-    return None
-
-
 def bin_tweets(src_coll,target_coll,verbose=False):
     '''
-    Takes a source collection and aggregates it into new collection.
+    Takes a source collection and writes it into new collection.
     Source collection docs have structure:
         - created_at
         - text
     Target collection has structure:
-        - time
-        - tweets (array of tweets)
+        - time (binned)
+        - text
     INPUT: source pymongo collection, target pymongo collection, bool
     OUTPUT: None
     '''
