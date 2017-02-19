@@ -1,10 +1,8 @@
 from collections import Counter
 from datetime import datetime
 from dateutil import tz
-import matplotlib.pyplot as plt
 from nltk.corpus import stopwords
 import pymongo
-import seaborn as sns
 import string
 from unidecode import unidecode
 
