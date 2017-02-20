@@ -96,7 +96,7 @@ def main():
     PIPELINE = [{'$group':{'_id':'$time','tweets':{'$push':'$text'}}}]
     ALLOWDISKUSE = True
 
-    FNAME = 'tweet_data.csv'
+    FNAME = '../data/tweet_data.csv'
     with open(FNAME,'w') as f:
         f.write('time,count,words\n')
         for item in coll.aggregate(pipeline=PIPELINE,allowDiskUse=ALLOWDISKUSE):
