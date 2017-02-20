@@ -76,6 +76,14 @@ def process_time(time_bin,stopwords,punc,n=10):
 
 def main():
     '''
+    From count_data.py, we have a new collection which has structure:
+        - time (rounded down to nearest minute)
+        - text (tweet text)
+
+    Now we can apply a GROUP BY time, from which we can perform our analysis.
+    Here is what I'm interested in:
+        - number of tweets at times
+        - most tweeted words at times
     '''
     STOPWORDS = [unidecode(word) for word in stopwords.words('english')]
 
