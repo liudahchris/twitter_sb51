@@ -26,7 +26,7 @@ def _clean_labels(words):
     return text
 
 
-def clean_df(df_):
+def clean_df(df):
     '''
     Takes data loaded from CSV and cleans it to be plotted
     INPUT: dataframe
@@ -80,6 +80,7 @@ def main():
     at that time.
     '''
     df = clean_df(pd.read_csv('../data/tweet_data.csv'))
+    make_plot(df)
     return None
 
 if __name__=='__main__':
