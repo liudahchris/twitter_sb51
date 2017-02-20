@@ -24,9 +24,9 @@ def clean_tokens(tweet,stopwords,punc):
         tweet = unidecode(tweet)
     # Lowercase, strip punctation, tokenize
     tokens = tweet.lower().translate(None,punc).split()
-    # Remove stopwords and hashtags
+    # Remove stopwords, hashtags, URLS, and user accounts
     tokens = [token for token in tokens if token not in stopwords\
-                and not is_url(token)]
+                and not is_url(token) and token[0] not in ['#','@']]
     return tokens
 
 def plot_time_counts(count_dict,outname='../images/time_counts.png'):
