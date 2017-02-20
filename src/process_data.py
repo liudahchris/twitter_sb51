@@ -6,6 +6,14 @@ import pymongo
 import string
 from unidecode import unidecode
 
+def is_url(s):
+    '''
+    Checks to see if s is a url by seeing if first 4 are 'http'
+    '''
+    if len(s)<4:
+        return False
+    return s[:4]=='http'
+
 def clean_tokens(tweet,stopwords,punc):
     '''
     Takes a tweet, lowers and strips punctuation, and removes stopwords and tags
@@ -17,7 +25,8 @@ def clean_tokens(tweet,stopwords,punc):
     # Lowercase, strip punctation, tokenize
     tokens = tweet.lower().translate(None,punc).split()
     # Remove stopwords and hashtags
-    tokens = [token for token in tokens if token not in stopwords]
+    tokens = [token for token in tokens if token not in stopwords\
+                and not is_url(token)]
     return tokens
 
 def plot_time_counts(count_dict,outname='../images/time_counts.png'):
@@ -104,7 +113,7 @@ def main():
     PIPELINE = [{'$group':{'_id':'$time','tweets':{'$push':'$text'}}}]
     ALLOWDISKUSE = True
 
-    FNAME = '../data/tweet_data.csv'
+    FNAME = '../data/tweet_data_2.csv'
     with open(FNAME,'w') as f:
         f.write('time,count,words\n')
         for item in coll.aggregate(pipeline=PIPELINE,allowDiskUse=ALLOWDISKUSE):
