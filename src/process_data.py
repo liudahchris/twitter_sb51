@@ -29,21 +29,6 @@ def clean_tokens(tweet,stopwords,punc):
                 and not is_url(token) and token[0] not in ['#','@']]
     return tokens
 
-def plot_time_counts(count_dict,outname='../images/time_counts.png'):
-    '''
-    INPUT: dictionary where keys are datetimes and values are counts
-    OUTPUT: none
-    '''
-    X,y = [],[]
-    for key in sorted(count_dict):
-        X.append(key)
-        y.append(count_dict[key])
-
-    plt.plot(X,y)
-    plt.savefig(outname)
-
-    return None
-
 def convert_utc(time_str,time_format="%Y/%m/%d %H:%M:%S",zone='America/Los_Angeles'):
     '''
     INPUT: date string in form "%Y/%m/%d %H:%M:%S" in UTC
