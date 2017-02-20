@@ -101,7 +101,7 @@ def main():
         f.write('time,count,words\n')
         for item in coll.aggregate(pipeline=PIPELINE,allowDiskUse=ALLOWDISKUSE):
             time,count,words = process_time(item,stopwords=STOPWORDS,punc=PUNC,n=N)
-            f.write('{},{},{}\n'.format(time,count,' '.join(words))
+            f.write('{},{},{}\n'.format(time,count,' '.join(words)))
     client.close()
 
     return None
