@@ -93,9 +93,10 @@ def main():
     PUNC = string.punctuation.translate(None,'@#')
 
     # Remove search words
-    SEARCH_WORDS = ['#sb51','#sbli','#superbowl','super','bowl']
+    SEARCH_WORDS = ['#sb51','#sbli','#superbowl','super','bowl', 'rt']
     STOPWORDS += SEARCH_WORDS
-
+    N = 10
+    
     # Set up mongo client
     client = pymongo.MongoClient()
     db = client['clean_tweets']
@@ -108,10 +109,7 @@ def main():
     with open(FNAME,'w') as f:
         f.write('time,count,words\n')
         for item in coll.aggregate(pipeline=PIPELINE,allowDiskUse=ALLOWDISKUSE):
-            tweets = item['tweets']
-            counts = len(tweets)
-            time = convert_utc(item['_id'])
-            top_words = top_n_words(tweets,stopwords=STOPWORDS,punc=PUNC)
+            process_time(item,stopwords=STOPWORDS,punc=PUNC,n=N)
 
     client.close()
 
