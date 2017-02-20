@@ -41,7 +41,22 @@ def make_plot(df,fname='../images/sb51_counts.png'):
     '''
     Saves an image of tweet counts time series to specified fname.
     '''
+    # Title and label names
+    TITLE = 'Super Bowl LI Tweet Counts'
+    X_LABEL = 'February 5, 2017'
+    Y_LABEL = 'Number of Tweets'
 
+    # Get data
+    x = df['time']
+    y = df['count']
+
+    # Start plotting
+    fig = plt.figure()
+    plt.plot(x,y)
+    plt.title(TITLE)
+    plt.xlabel(X_LABEL)
+    plt.ylabel(Y_LABEL)
+    plt.savefig(fname)
     return None
 
 def plotly_plot(df):
