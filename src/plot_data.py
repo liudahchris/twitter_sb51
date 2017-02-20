@@ -1,6 +1,7 @@
 from datetime import datetime
 import matplotlib.pyplot as plt
 import plotly.plotly as py
+import plotly.graph_objs as go
 import pandas as pd
 import seaborn as sns
 
@@ -21,8 +22,8 @@ def _clean_labels(words):
     '''
     tokens = words.split()
     n_words = len(tokens)
-    text = 'Top {} Words:\n'.format(n_words)
-    text += '\n'.join(words.split())
+    text = 'Top {} Words:<br>'.format(n_words)
+    text += '<br>'.join(words.split())
     return text
 
 
@@ -37,31 +38,40 @@ def clean_df(df):
     _df['words'] = _df['words'].apply(_clean_labels)
     return _df
 
-def make_plot(df,fname='../images/sb51_counts.png'):
+def make_plot(x,y,title,xlabel,ylabel,fname='../images/sb51_counts.png'):
     '''
     Saves an image of tweet counts time series to specified fname.
     '''
-    # Title and label names
-    TITLE = 'Super Bowl LI Tweet Counts'
-    X_LABEL = 'February 5, 2017'
-    Y_LABEL = 'Number of Tweets'
-
-    # Get data
-    x = df['time']
-    y = df['count']
-
     # Start plotting
     fig = plt.figure()
     plt.plot(x,y)
-    plt.title(TITLE)
-    plt.xlabel(X_LABEL)
-    plt.ylabel(Y_LABEL)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.savefig(fname)
     return None
 
-def plotly_plot(df):
+def plotly_plot(x,y,title,xlabel,ylabel,labels,fname='sb51-analysis'):
     '''
     '''
+    data = [
+        go.Scatter(
+            x=x,
+            y=y,
+            mode='markers+lines',
+            text=labels
+        )
+
+    ]
+    layout = go.Layout(
+        title=title,
+        xaxis=dict(title=xlabel),
+        yaxis=dict(title=ylabel),
+        hovermode='closest'
+    )
+
+    fig = go.Figure(data=data,layout=layout)
+    py.plot(fig,filename=fname)
     return None
 
 def main():
@@ -79,8 +89,23 @@ def main():
     you can hover over the points to also see what the most tweeted words are
     at that time.
     '''
-    df = clean_df(pd.read_csv('../data/tweet_data.csv'))
-    make_plot(df)
+    # Load data
+    FNAME = '../data/tweet_data.csv'
+    df = clean_df(pd.read_csv(FNAME))
+
+    # Titles and labels
+    TITLE = 'Super Bowl LI Tweet Count'
+    XLABEL = 'February 5th, 2017 (PST)'
+    YLABEL = 'Number of Tweets'
+
+    # Load data into variables
+    x = df['time']
+    y = df['count']
+    labels = df['words']
+
+    # Plot data
+    # make_plot(df['time'],df['count'],TITLE,XLABEL,YLABEL)
+    plotly_plot(x,y,TITLE,XLABEL,YLABEL,labels)
     return None
 
 if __name__=='__main__':
