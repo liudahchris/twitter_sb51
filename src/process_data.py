@@ -6,18 +6,6 @@ import pymongo
 import string
 from unidecode import unidecode
 
-def dict_to_csv(d,outname,key_names='col1',val_names='col2'):
-    '''
-    Writes dictionary key and value pairs into CSV file.
-    INPUT: dict, str, str(optional), str(optional)
-    OUTPUT: None
-    '''
-    with open(outname,'w') as f:
-        f.write('{},{}\n'.format(key_names,val_names))
-        for key in sorted(d):
-            f.write('{}, {}\n'.format(key,d[key]))
-    return None
-
 def clean_tokens(tweet,stopwords,punc):
     '''
     Takes a tweet, lowers and strips punctuation, and removes stopwords and tags
@@ -76,6 +64,9 @@ def top_n_words(docs,stopwords,punc,n=10):
 
 def process_time(time_bin,stopwords,punc,n=10):
     '''
+    Takes aggregated data dictionary and generates relevant data.
+    INPUT: dict, list, str, int
+    OUTPUT: tuple(datetime,int,list)
     '''
     tweets = time_bin['tweets']
     counts = len(tweets)
@@ -92,11 +83,11 @@ def main():
     # We'll keep '@' to look at popular users and # to look at popular tags
     PUNC = string.punctuation.translate(None,'@#')
 
-    # Remove search words
+    # Remove search words and retweet marker
     SEARCH_WORDS = ['#sb51','#sbli','#superbowl','super','bowl', 'rt']
     STOPWORDS += SEARCH_WORDS
     N = 10
-    
+
     # Set up mongo client
     client = pymongo.MongoClient()
     db = client['clean_tweets']
@@ -109,12 +100,11 @@ def main():
     with open(FNAME,'w') as f:
         f.write('time,count,words\n')
         for item in coll.aggregate(pipeline=PIPELINE,allowDiskUse=ALLOWDISKUSE):
-            process_time(item,stopwords=STOPWORDS,punc=PUNC,n=N)
-
+            time,count,words = process_time(item,stopwords=STOPWORDS,punc=PUNC,n=N)
+            f.write('{},{},{}\n'.format(time,count,' '.join(words))
     client.close()
 
     return None
 
 if __name__=='__main__':
-    # main()
-    pass
+    main()
