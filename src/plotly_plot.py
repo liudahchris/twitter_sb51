@@ -55,7 +55,7 @@ def main():
     FORM = '%Y/%m/%d %H:%M:%S'
 
     # Titles and labels
-    title = 'Super Bowl LI Tweet Count test 2'
+    title = 'Super Bowl LI Tweet Count'
     xlabel = 'February 5th, 2017 (PST)'
     ylabel = 'Number of Tweets'
 
@@ -126,8 +126,8 @@ def main():
         'Falcons score fourth touchdown<br>Falcons lead 28-3',
         'Edelman makes catch of the game',
         'Patriots score touchdown.<br>Tie game 28-28',
-        'Super Bowl History is made<br>SBLI is first to go into overtime',
-        'Patriots win in overtime and<br>become SBLI champions'
+        'Super Bowl LI is first<br>ever to go into overtime',
+        'Patriots make historic comeback<br>and become SBLI champions'
     ]
 
     # Make vertical lines
@@ -148,7 +148,7 @@ def main():
     )
 
     fig = go.Figure(data=data,layout=layout)
-    py.plot(fig,filename='sb-test')
+    py.plot(fig,filename='sb51-twitter-analysis')
     return None
 
 if __name__=='__main__':
