@@ -90,7 +90,7 @@ def main():
     at that time.
     '''
     # Load data
-    FNAME = '../data/tweet_data.csv'
+    FNAME = '../data/tweet_data_2.csv'
     df = clean_df(pd.read_csv(FNAME))
 
     # Titles and labels
