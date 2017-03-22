@@ -1,11 +1,9 @@
 from collections import defaultdict
 import pymongo
 from clean_date import _bin_date
-import numpy as np
-import string
-from unidecode import unidecode
 
-def bin_tweets(src_coll,target_coll,verbose=False):
+
+def bin_tweets(src_coll, target_coll, verbose=False):
     '''
     Takes a source collection and writes it into new collection.
     Source collection docs have structure:
@@ -20,16 +18,17 @@ def bin_tweets(src_coll,target_coll,verbose=False):
     START_TIME = "2017/02/05 22:30:00"
     END_TIME = "2017/02/06 04:30:00"
 
-    for i,tweet in enumerate(src_coll.find()):
-        print_status(i,verbose=verbose)
+    for i, tweet in enumerate(src_coll.find()):
+        print_status(i, verbose=verbose)
         # Bin time
-        time = _bin_date(tweet['created_at'],bin_size=60)
+        time = _bin_date(tweet['created_at'], bin_size=60)
         if time < START_TIME or time > END_TIME:
             continue
         text = tweet['text']
         # Add tweet text to time slot
-        target_coll.insert_one({'text':text,'time':time})
+        target_coll.insert_one({'text': text, 'time': time})
     return None
+
 
 def count_tweets(coll):
     '''
@@ -43,14 +42,15 @@ def count_tweets(coll):
     for doc in coll.find():
         time = doc['time']
         count = len(doc['tweets'])
-        coll.update_one({'time':time},{'$set':{'count':count}})
+        coll.update_one({'time': time}, {'$set': {'count': count}})
     return None
 
-def print_status(i,n=10000,verbose=True):
+
+def print_status(i, n=10000, verbose=True):
     '''
     Prints statement after ever n tweets are processed
     '''
-    if verbose and i%n==0:
+    if verbose and i%n == 0:
         print "{} tweets processed".format(i)
     return
 
@@ -75,11 +75,11 @@ def main():
 
     # Build new collection that has fields time and tweets during that time
     print 'Binning tweets...'
-    bin_tweets(coll,target,VERBOSE)
+    bin_tweets(coll, target, VERBOSE)
 
     client.close()
     return None
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     main()
